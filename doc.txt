@@ -1,0 +1,160 @@
+🌐 SOFTWARE SPECIFICATION BRIEF: "SAVE THE WATERS" PLATFORM
+
+1. Project Overview & Tech Stack
+
+"Save the Waters" is an enterprise-grade IoT environmental monitoring and
+advocacy platform designed to track water levels and quality across Lagos
+State's waterfronts, using Makoko as the primary active case study.
+
+Recommended Tech Stack (For the Developer)
+
+  - Frontend Framework: Next.js (React) — chosen for seamless Vercel hosting,
+    SEO optimization, and fast routing.
+  - Styling Engine: Tailwind CSS — for clean, responsive, and modern layout
+    structures.
+  - GIS Engine: Leaflet.js (via react-leaflet) — open-source, lightweight
+    mapping engine with no usage fees or credit card requirements.
+  - Animation Library: Framer Motion — for smooth, hardware-accelerated water
+    level animations.
+  - Data Visualization: Recharts or Chart.js — for displaying ThingSpeak
+    historical trend graphs.
+
+2. Page-by-Page Specifications
+
+Page 1: The Landing Page (Advocacy & Awareness)
+
+UI Style Guidelines: Clean, high-impact, modern, using a color palette and
+layout hierarchy inspired by the UN Sustainable Development Goals (SDGs)
+website. Wide containers, bold typography, and cards with large, clear icons.
+
+Key Sections:
+
+1.  The Hero Section:
+      - A high-definition background image of Lagos waters (contrast between raw
+        nature and urban waterfronts).
+      - Main Copy: "Protecting Nigeria's Waterfronts: Real-time IoT surveillance
+        for climate resilience and ecological safety."
+      - A prominent, custom-styled CTA button: "Explore Live Map" (links
+        directly to Page 2).
+2.  Advocacy Campaign — "Bring Back Lagos Marine Life":
+      - A highly engaging, story-driven layout focusing on the ecological impact
+        of pollution.
+      - Educational Copy: Explaining how native marine life (like dolphins and
+        whales, once common in Lagos waters) left due to uncontrolled chemical
+        dumping, dredging noise, and sewage.
+      - The Solution: Explaining how our IoT sensor network collects hard,
+        un-fakeable data to help local environmental agencies (like LASEPA)
+        enforce ISO corporate compliance and stop toxic industrial waste at the
+        source, paving the way for marine ecosystems to heal and aquatic life to
+        return.
+      - Interactive Call-to-Action: A "Join the Initiative" email signup or
+        petition link.
+
+Page 2: The Interactive GIS Map (Lagos Monitoring Grid)
+
+A full-screen Map Page that visualizes the distribution of monitoring nodes
+across Lagos Lagoon.
+
+Map Features:
+
+1.  Default Viewport: Center coordinates [6.5050, 3.4350] (covering the Lagos
+    Lagoon, Third Mainland Bridge, Lekki, and Ikorodu) with a zoom level of 12.
+2.  Multi-Device Pins: Place pins at:
+      - Makoko (Case Study): Coordinates [6.4965, 3.3963] (Labeled: LIVE GPRS
+        FEED).
+      - Lekki Phase 1: Coordinates [6.4468, 3.4619] (Labeled: Simulated Demo
+        Station).
+      - Ikorodu Terminal: Coordinates [6.5910, 3.5042] (Labeled: Simulated Demo
+        Station).
+3.  Interaction:
+      - Hovering over a pin shows a custom Leaflet tooltip with the Station Name
+        and Online/Offline status.
+      - Clicking a pin slides open the Detailed Station Dashboard (Page 3) for
+        that specific node.
+
+Page 3: Detailed Station Dashboard (The "Look" after clicking a Pin)
+
+This is the core diagnostic view for an individual monitoring station (e.g.,
+Makoko).
+
++------------------------------------------------------------+
+|  [ STATION NAME ]                     [ STATUS: GPRS LIVE ] |
++-----------------------------+------------------------------+
+|                             |                              |
+|   SECTION A: WATER LEVEL    |      SECTION B: pH METER     |
+|   (Dynamic Car Illustration) |      (Radial/Vertical Gauge) |
+|                             |                              |
+|         ~ ~ ~ ~ ~ ~         |             [ 7.1 ]          |
+|       ~ ~ ~ ~ ~ ~ ~ ~       |                              |
+|       ---------------       |       Ecosystem Optimal      |
+|       |   [ CAR ]   |       |       (No Contamination)     |
+|                             |                              |
++-----------------------------+------------------------------+
+|            SECTION C: HISTORICAL DATA GRAPHS               |
+|            (ThingSpeak 24hr / Weekly Trend Charts)         |
++------------------------------------------------------------+
+
+Section A: Water Level Animation (Framer Motion)
+
+  - The Visualization: A highly clean, minimal vector graphic of a standard
+    mid-size sedan car (simulating a real-world vehicle parked on a Lagos
+    street).
+  - The Animation: A blue-tinted overlay representing the water level. This
+    overlay rises and falls dynamically based on the current sensor
+    distanceValue reading (0 to 100 cm).
+  - The Dynamic Color Coding (As specified by the user):
+      - Clear Blue Water: Normal/Safe condition (water is far from the sensor,
+        distanceValue > 30cm). Text overlay reads: "Status: Safe (Ecosystem
+        Normal)".
+      - Yellow Water: Warning/Too Low condition (water is drying out or sensor
+        is misreading, distanceValue > 150cm). Text overlay reads: "Warning:
+        Level Depleted / Out of Range".
+      - Green Water: Danger/Too High condition (water has breached the safety
+        threshold and is flooding, distanceValue < 30cm). The water overlay
+        rises up the car wheels/doors. Text overlay flashes: "DANGER: FLOODING
+        DETECTED".
+
+Section B: The pH Level Gauge
+
+  - The Visualization: A radial gauge or vertical meter showing the current pH
+    scale from 0 to 14 with a floating indicator pointing to the exact decimal
+    value.
+  - Dynamic Translation Box (What it means): Next to the gauge, a text block
+    automatically updates to translate the raw pH number into a real-world
+    warning:
+      - pH < 6.5 (Red Text): "Unsafe Acidic Level (Suspected industrial chemical
+        runoff or organic decay)."
+      - pH 6.5 – 8.5 (Green Text): "Ecosystem Optimal (Safe for marine life,
+        human contact, and local aquaculture)."
+      - pH > 8.5 (Red Text): "Unsafe Alkaline Level (Suspected raw domestic
+        sewage or heavy soap/detergent contamination)."
+
+Section C: Historical Data Charts
+
+  - Embedding of the ThingSpeak iframe charts (Field 1 and Field 2) showing the
+    fluctuating trends over the last 24 hours/week to allow researchers to
+    download the data as a CSV sheet for environmental reports.
+
+3. Recommended Extra Features (Value Additions)
+
+To elevate this project even further for the final defense, have your developer
+add these sections:
+
+1.  "Report a Violation" (ISO Portal): A simple form where local residents or
+    fishermen can upload pictures of illegal industrial dumping in their area.
+    This data is mapped directly on the GIS grid to identify illegal corporate
+    polluters.
+2.  Public Health Warnings: A dynamic block that uses the current pH and water
+    level to display active safety recommendations (e.g., "Current water
+    conditions are unsafe. High risk of waterborne pathogens (Cholera). Avoid
+    contact with skin.").
+
+4. API Integration Details for the Developer
+
+  - ThingSpeak API Endpoint:
+    https://api.thingspeak.com/channels/${channelId}/feeds/last.json?api_key=${readApiKey}
+  - Data Parsing:
+      - field1 represents the raw distanceValue in centimeters (used to drive
+        the car water level animation height).
+      - field2 represents the raw pHValue (used to drive the pH gauge indicator
+        and the dynamic warning text).
