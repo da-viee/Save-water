@@ -22,20 +22,20 @@ export default function HistoricalCharts({ data }: HistoricalChartsProps) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 shadow-md p-8 h-full flex flex-col">
-      <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-4">
+    <div className="bg-white border border-gray-200 shadow-md p-4 md:p-8 h-full flex flex-col">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-gray-100 pb-4 gap-4">
         <div>
           <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">24-Hour Trend Analysis</h3>
           <p className="text-sm text-gray-500 font-bold mt-1 tracking-widest">Live data from ThingSpeak IoT Network</p>
         </div>
-        <button className="bg-gray-100 hover:bg-gray-200 text-sm font-black text-gray-700 px-6 py-3 transition-colors uppercase tracking-widest">
+        <button className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-sm font-black text-gray-700 px-6 py-3 transition-colors uppercase tracking-widest">
           Export CSV
         </button>
       </div>
 
-      <div className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="flex-grow grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Distance / Water Level Chart */}
-        <div className="flex flex-col bg-gray-50 p-6 border border-gray-100">
+        <div className="flex flex-col bg-gray-50 p-6 border border-gray-100 min-h-[280px]">
           <h4 className="text-sm font-black text-[#00A99D] mb-6 flex items-center gap-2 uppercase tracking-widest">
             <span className="w-3 h-3 bg-[#00A99D]"></span>
             Water Depth (cm)
@@ -71,7 +71,7 @@ export default function HistoricalCharts({ data }: HistoricalChartsProps) {
         </div>
 
         {/* pH Level Chart */}
-        <div className="flex flex-col bg-gray-50 p-6 border border-gray-100">
+        <div className="flex flex-col bg-gray-50 p-6 border border-gray-100 min-h-[280px]">
           <h4 className="text-sm font-black text-[#F99D26] mb-6 flex items-center gap-2 uppercase tracking-widest">
             <span className="w-3 h-3 bg-[#F99D26]"></span>
             pH Level

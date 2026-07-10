@@ -138,9 +138,9 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
   }
 
   return (
-    <div className="flex-grow flex flex-col bg-gray-50 p-4 md:p-8">
+    <div className="flex-grow flex flex-col bg-gray-50 p-4 md:p-6 lg:p-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 bg-white p-6 shadow-sm border border-gray-200">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 bg-white p-4 sm:p-6 shadow-sm border border-gray-200 rounded-3xl">
         <div>
           <div className="flex items-center gap-4 mb-2">
             <Link href="/map" className="text-gray-400 hover:text-[#E5243B] transition-colors p-2 bg-gray-100 rounded-full hover:bg-red-50">
@@ -150,7 +150,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
             </Link>
             <h1 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tighter uppercase">{stationName}</h1>
           </div>
-          <p className="text-sm text-gray-500 font-bold tracking-widest ml-14">NODE_ID: {stationId.toUpperCase()} | REGION: LAGOS LAGOON</p>
+          <p className="text-sm text-gray-500 font-bold tracking-widest md:ml-14">NODE_ID: {stationId.toUpperCase()} | REGION: LAGOS LAGOON</p>
         </div>
         
         <div className={`flex items-center gap-3 py-2 px-6 border-2 ${isLive ? 'border-[#00A99D] bg-[#00A99D]/10' : 'border-[#F99D26] bg-[#F99D26]/10'}`}>
@@ -166,7 +166,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
 
       {/* Health Warning Banner */}
       {showHealthWarning && (
-        <div className="mb-8 bg-[#E5243B] p-6 flex items-start gap-4 shadow-lg text-white">
+        <div className="mb-8 bg-[#E5243B] p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-lg text-white">
           <div className="mt-1">
             <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -181,10 +181,10 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
 
       {/* Main Dashboard Grid - Resized Proportions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        <div className="lg:col-span-2 h-[450px]">
+        <div className="lg:col-span-2 h-auto lg:h-[450px]">
           <WaterLevelIndicator distanceValue={distance} phValue={ph} />
         </div>
-        <div className="lg:col-span-1 h-[450px]">
+        <div className="lg:col-span-1 h-auto lg:h-[450px]">
           <PhMeter phValue={ph} />
         </div>
       </div>

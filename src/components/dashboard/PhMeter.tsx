@@ -28,14 +28,14 @@ export default function PhMeter({ phValue }: PhMeterProps) {
 
   return (
     <div className="bg-white border border-gray-200 shadow-md h-full flex flex-col">
-      <div className="p-6 border-b border-gray-100">
+      <div className="p-4 sm:p-6 border-b border-gray-100">
         <h3 className="text-xl font-black text-gray-900 uppercase tracking-tighter">pH Analysis</h3>
       </div>
       
-      <div className="flex-grow flex flex-col justify-center gap-8 p-6">
+      <div className="flex-grow flex flex-col justify-center gap-6 p-4 sm:p-6">
         {/* Value Display */}
         <div className="text-center">
-          <div className={`text-7xl font-black tracking-tighter ${titleColor}`}>
+          <div className={`text-6xl sm:text-7xl font-black tracking-tighter ${titleColor}`}>
             {phValue.toFixed(1)}
           </div>
           <div className="text-gray-500 font-bold uppercase tracking-widest mt-1 text-xs">pH SCALE</div>

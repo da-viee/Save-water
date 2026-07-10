@@ -8,34 +8,47 @@ interface WaterLevelProps {
 }
 
 export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLevelProps) {
-  // Determine water color based on pH and status based on both pH and distance.
+  const isAcidic = phValue < 6.5;
+  const isAlkaline = phValue > 8.5;
+  const isFlood = distanceValue < 30;
+  const isLowLevel = distanceValue > 150;
+
   let textColor = "text-[#00A99D]";
   let statusMessage = "SAFE: ECOSYSTEM NORMAL";
   let waveFill = "#0ea5e9";
-  let bgColor = "bg-[#00A99D]";
-  
-  if (phValue < 6.5) {
+  let statusBgColor = "bg-[#00A99D]";
+  let waterBodyColor = "#0ea5e9";
+
+  if (isAcidic) {
     textColor = "text-[#E5243B]";
     statusMessage = "DANGER: ACIDIC WATER";
-    waveFill = "#0f766e"; // deeper teal for acidic waters
-    bgColor = "bg-[#E5243B]";
-  } else if (phValue > 8.5) {
+    waveFill = "#ef4444";
+    statusBgColor = "bg-[#E5243B]";
+    waterBodyColor = "#ef4444";
+  } else if (isAlkaline) {
     textColor = "text-[#F99D26]";
     statusMessage = "WARNING: ALKALINE WATER";
     waveFill = "#f97316";
-    bgColor = "bg-[#F99D26]";
+    statusBgColor = "bg-[#F99D26]";
+    waterBodyColor = "#f97316";
   } else {
-    waveFill = "#0ea5e9"; // safe blue water for drinkable conditions
+    waveFill = "#0ea5e9";
+    statusBgColor = "bg-[#00A99D]";
+    waterBodyColor = "#0ea5e9";
   }
 
-  if (distanceValue < 30) {
+  if (isFlood) {
     textColor = "text-[#E5243B]";
     statusMessage = "DANGER: FLOODING DETECTED";
-    bgColor = "bg-[#E5243B]";
-  } else if (distanceValue > 150 && phValue >= 6.5 && phValue <= 8.5) {
+    waveFill = "#ef4444";
+    statusBgColor = "bg-[#E5243B]";
+    waterBodyColor = "#ef4444";
+  } else if (isLowLevel && !isAcidic && !isAlkaline) {
     textColor = "text-[#F99D26]";
     statusMessage = "WARNING: LEVEL DEPLETED";
-    bgColor = "bg-[#F99D26]";
+    statusBgColor = "bg-[#F99D26]";
+    // keep the water itself safe blue when pH is normal
+    waterBodyColor = "#0ea5e9";
   }
 
   // --- ACCURATE FILL & DEPTH CALCULATION ---
@@ -65,7 +78,7 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
           </p>
         </div>
         <div className="text-right">
-          <div className={`text-white ${bgColor} px-3 py-1 font-black text-xl shadow-sm inline-block`}>
+          <div className={`text-white ${statusBgColor} px-3 py-1 font-black text-xl shadow-sm inline-block`}>
             {floodDepthCm} <span className="text-sm font-medium">cm Depth</span>
           </div>
         </div>
@@ -166,7 +179,7 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
 
 
         {/* Height Markers — mathematically aligned to the water fill percentage */}
-        <div className="absolute inset-y-0 right-0 w-44 border-l-2 border-dashed border-gray-300 pointer-events-none" style={{ zIndex: 30 }}>
+        <div className="hidden lg:block absolute inset-y-0 right-0 w-44 border-l-2 border-dashed border-gray-300 pointer-events-none" style={{ zIndex: 30 }}>
           {/* SUV Engine — 80cm depth (40% height) */}
           <div className="absolute w-full border-t border-red-300" style={{ bottom: '40%' }}>
             <span className="absolute -top-3 left-3 bg-[#E5243B] text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5 shadow-md whitespace-nowrap">
@@ -195,7 +208,7 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
         {/* Car SVG — front-view, RIGHT half visible, hugging the right edge of card */}
         {/* Attribution: "Car" icon by Yon ten from the Noun Project */}
         <div
-          className="absolute z-10"
+          className="absolute z-10 hidden md:block"
           style={{
             width: '100%',   /* ← increase this % to make car wider */
             height: '150%',  /* ← increase this % to make car taller */
@@ -231,8 +244,8 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
           transition={{ type: "spring", stiffness: 40, damping: 20 }}
           style={{ zIndex: 20 }}
         >
-          {/* Solid water body matching the wave color */}
-          <div className={`absolute top-[30px] bottom-0 left-0 right-0 ${bgColor} opacity-85`} />
+          {/* Solid water body matching the pH-based water color */}
+          <div className="absolute top-[30px] bottom-0 left-0 right-0" style={{ backgroundColor: waterBodyColor, opacity: 0.85 }} />
 
           {/* Wave Layer 1 (Back, slower, lighter opacity) */}
           <motion.div 
