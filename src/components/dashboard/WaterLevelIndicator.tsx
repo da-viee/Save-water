@@ -4,24 +4,37 @@ import { motion } from "framer-motion";
 
 interface WaterLevelProps {
   distanceValue: number; // 0 to 200 cm (distance from sensor to water surface)
+  phValue: number;
 }
 
-export default function WaterLevelIndicator({ distanceValue }: WaterLevelProps) {
-  // Determine status based on distance
+export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLevelProps) {
+  // Determine water color based on pH and status based on both pH and distance.
   let textColor = "text-[#00A99D]";
   let statusMessage = "SAFE: ECOSYSTEM NORMAL";
   let waveFill = "#0ea5e9";
   let bgColor = "bg-[#00A99D]";
   
+  if (phValue < 6.5) {
+    textColor = "text-[#E5243B]";
+    statusMessage = "DANGER: ACIDIC WATER";
+    waveFill = "#0f766e"; // deeper teal for acidic waters
+    bgColor = "bg-[#E5243B]";
+  } else if (phValue > 8.5) {
+    textColor = "text-[#F99D26]";
+    statusMessage = "WARNING: ALKALINE WATER";
+    waveFill = "#f97316";
+    bgColor = "bg-[#F99D26]";
+  } else {
+    waveFill = "#0ea5e9"; // safe blue water for drinkable conditions
+  }
+
   if (distanceValue < 30) {
     textColor = "text-[#E5243B]";
     statusMessage = "DANGER: FLOODING DETECTED";
-    waveFill = "#ef4444";
     bgColor = "bg-[#E5243B]";
-  } else if (distanceValue > 150) {
+  } else if (distanceValue > 150 && phValue >= 6.5 && phValue <= 8.5) {
     textColor = "text-[#F99D26]";
     statusMessage = "WARNING: LEVEL DEPLETED";
-    waveFill = "#f97316";
     bgColor = "bg-[#F99D26]";
   }
 

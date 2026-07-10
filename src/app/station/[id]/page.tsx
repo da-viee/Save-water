@@ -182,7 +182,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
       {/* Main Dashboard Grid - Resized Proportions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         <div className="lg:col-span-2 h-[450px]">
-          <WaterLevelIndicator distanceValue={distance} />
+          <WaterLevelIndicator distanceValue={distance} phValue={ph} />
         </div>
         <div className="lg:col-span-1 h-[450px]">
           <PhMeter phValue={ph} />
