@@ -10,8 +10,10 @@ interface WaterLevelProps {
 export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLevelProps) {
   const isAcidic = phValue < 6.5;
   const isAlkaline = phValue > 8.5;
-  const isFlood = distanceValue < 30;
-  const isLowLevel = distanceValue > 150;
+  // Now distanceValue represents water depth on the ground
+  const isSevereFlood = distanceValue >= 80;
+  const isModerateFlood = distanceValue >= 45 && distanceValue < 80;
+  const isWaterLogging = distanceValue >= 20 && distanceValue < 45;
 
   let textColor = "text-[#00A99D]";
   let statusMessage = "SAFE: ECOSYSTEM NORMAL";
@@ -37,18 +39,22 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
     waterBodyColor = "#0ea5e9";
   }
 
-  if (isFlood) {
+  if (isSevereFlood) {
     textColor = "text-[#E5243B]";
-    statusMessage = "DANGER: FLOODING DETECTED";
-    waveFill = "#ef4444";
+    statusMessage = "CRITICAL: SEVERE FLOODING";
     statusBgColor = "bg-[#E5243B]";
-    waterBodyColor = "#ef4444";
-  } else if (isLowLevel && !isAcidic && !isAlkaline) {
+  } else if (isModerateFlood) {
+    textColor = "text-[#E5243B]";
+    statusMessage = "DANGER: FLOODING";
+    statusBgColor = "bg-[#E5243B]";
+  } else if (isWaterLogging) {
     textColor = "text-[#F99D26]";
-    statusMessage = "WARNING: LEVEL DEPLETED";
-    statusBgColor = "bg-[#F99D26]";
-    // keep the water itself safe blue when pH is normal
-    waterBodyColor = "#0ea5e9";
+    statusMessage = "WARNING: WATER LOGGED";
+    if (!isAcidic && !isAlkaline) {
+      statusBgColor = "bg-[#F99D26]";
+    }
+  } else if (!isAcidic && !isAlkaline) {
+    statusMessage = "SAFE: NORMAL LEVEL";
   }
 
   // --- ACCURATE FILL & DEPTH CALCULATION ---
