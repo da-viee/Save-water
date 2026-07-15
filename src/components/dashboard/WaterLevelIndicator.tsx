@@ -52,12 +52,9 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
   }
 
   // --- ACCURATE FILL & DEPTH CALCULATION ---
-  // The sensor is mounted 200cm above the ground.
-  // When distanceValue = 200cm, water depth is 0cm (empty).
-  // When distanceValue = 0cm, water depth is 200cm (fully flooded).
+  // The sensor provides water depth directly.
   const sensorHeight = 200;
-  const safeDistance = Math.min(Math.max(distanceValue, 0), sensorHeight);
-  const floodDepthCm = sensorHeight - safeDistance; // actual depth of water on ground
+  const floodDepthCm = Math.min(Math.max(distanceValue, 0), sensorHeight);
   const fillPercentage = (floodDepthCm / sensorHeight) * 100;
 
   // --- HEIGHT MARKERS ---
