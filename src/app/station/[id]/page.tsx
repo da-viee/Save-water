@@ -181,9 +181,9 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
 
   let showHealthWarning = false;
   let healthWarningMsg = "";
-  if (ph < 6.5 || ph > 8.5 || distance < 30) {
+  if (ph < 6.5 || ph > 8.5 || distance >= 45) {
     showHealthWarning = true;
-    healthWarningMsg = distance < 30
+    healthWarningMsg = distance >= 45
       ? "CRITICAL: Flooding detected. High risk of property damage and waterborne pathogens. Evacuate low-lying areas."
       : "WARNING: Water conditions are unsafe. High risk of chemical burns or pathogens. Avoid contact with skin.";
   }
