@@ -43,22 +43,22 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
 
   useEffect(() => {
     const channelId = "3417136";
-    
+
     const fetchData = async () => {
       try {
-        const res = await fetch(`https://api.thingspeak.com/channels/${channelId}/feeds.json?results=24`);
+        const res = await fetch(`https://api.thingspeak.com/channels/${channelId}/feeds.json?api_key=8GIAEFGWHVB9DAHP&results=24`);
         if (!res.ok) throw new Error("Failed to fetch");
-        
+
         const data: ThingSpeakResponse = await res.json();
-        
+
         if (data.feeds && data.feeds.length > 0) {
           const lastFeed = data.feeds[data.feeds.length - 1];
           const lastDistance = parseFloat(lastFeed.field1);
           const lastPh = parseFloat(lastFeed.field2);
-          
+
           if (!isNaN(lastDistance)) setDistance(lastDistance);
           if (!isNaN(lastPh)) setPh(lastPh);
- 
+
           const formattedChartData = data.feeds.map(feed => {
             const date = new Date(feed.created_at);
             const rawDistance = parseFloat(feed.field1) || 0;
@@ -76,13 +76,13 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
       } catch (error) {
         setIsOffline(true);
         setOfflineDate("July 12, 2026, 14:30 WAT");
-        
+
         const lastKnownDistance = 179;
         const lastKnownPh = 6.4;
-        
+
         setDistance(lastKnownDistance);
         setPh(lastKnownPh);
-        
+
         setChartData([
           { time: "11:00", distance: 200 - 179, ph: 6.5 },
           { time: "12:00", distance: 200 - 178, ph: 6.3 },
@@ -93,7 +93,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
         setIsLoading(false);
       }
     };
- 
+
     // Mock data fallback removed
 
     if (isLive) {
@@ -103,18 +103,18 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
     } else {
       // Direct local simulation for Lekki/Ikorodu with updates every 5s
       const runSimulation = () => {
-        const baseDistance = stationId === 'lekki' ? 140 : 
-                             stationId === 'victoria-island' ? 130 :
-                             stationId === 'apapa' ? 150 :
-                             stationId === 'epe' ? 160 :
-                             stationId === 'badagry' ? 145 : 170; 
-        
-        const basePh = stationId === 'lekki' ? 7.4 : 
-                       stationId === 'victoria-island' ? 7.5 :
-                       stationId === 'apapa' ? 6.5 : 
-                       stationId === 'epe' ? 7.2 :
-                       stationId === 'badagry' ? 7.0 : 6.8;
-        
+        const baseDistance = stationId === 'lekki' ? 140 :
+          stationId === 'victoria-island' ? 130 :
+            stationId === 'apapa' ? 150 :
+              stationId === 'epe' ? 160 :
+                stationId === 'badagry' ? 145 : 170;
+
+        const basePh = stationId === 'lekki' ? 7.4 :
+          stationId === 'victoria-island' ? 7.5 :
+            stationId === 'apapa' ? 6.5 :
+              stationId === 'epe' ? 7.2 :
+                stationId === 'badagry' ? 7.0 : 6.8;
+
         const newDistance = baseDistance + (Math.random() * 4 - 2);
         const newPh = Number((basePh + (Math.random() * 0.2 - 0.1)).toFixed(2));
 
@@ -123,7 +123,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
           if (currentChart.length === 0) {
             const mockHist = [];
             const now = new Date();
-            for(let i=24; i>=0; i--) {
+            for (let i = 24; i >= 0; i--) {
               const t = new Date(now.getTime() - i * 60 * 60 * 1000);
               mockHist.push({
                 time: `${t.getHours()}:00`,
@@ -133,7 +133,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
             }
             currentChart = mockHist;
           }
-          
+
           const updatedChart = [...currentChart];
           const lastIndex = updatedChart.length - 1;
           if (lastIndex >= 0) {
@@ -147,17 +147,17 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
           }
           return updatedChart;
         });
-        
+
         setDistance(newDistance);
         setPh(newPh);
         setIsLoading(false);
       };
-      
+
       runSimulation();
       const interval = setInterval(runSimulation, 5000);
       return () => clearInterval(interval);
     }
- 
+
   }, [stationId, isLive]);
 
   if (isLoading) {
@@ -168,7 +168,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
   let healthWarningMsg = "";
   if (ph < 6.5 || ph > 8.5 || distance < 30) {
     showHealthWarning = true;
-    healthWarningMsg = distance < 30 
+    healthWarningMsg = distance < 30
       ? "CRITICAL: Flooding detected. High risk of property damage and waterborne pathogens. Evacuate low-lying areas."
       : "WARNING: Water conditions are unsafe. High risk of chemical burns or pathogens. Avoid contact with skin.";
   }
@@ -188,7 +188,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
           </div>
           <p className="text-sm text-gray-500 font-bold tracking-widest md:ml-14">NODE_ID: {stationId.toUpperCase()} | REGION: LAGOS LAGOON</p>
         </div>
-        
+
         <div className={`flex items-center gap-3 py-2 px-6 border-2 rounded-full ${isLive && !isOffline ? 'border-[#00A99D] bg-[#00A99D]/10' : isOffline ? 'border-red-600 bg-red-100' : 'border-[#F99D26] bg-[#F99D26]/10'}`}>
           <div className="relative flex h-3 w-3">
             {!isOffline && <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${isLive ? 'bg-[#00A99D]' : 'bg-[#F99D26]'} opacity-75`}></span>}
