@@ -53,9 +53,16 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
 
         if (data.feeds && data.feeds.length > 0) {
           const lastFeed = data.feeds[data.feeds.length - 1];
+          const lastFeedTime = new Date(lastFeed.created_at).getTime();
+          const now = new Date().getTime();
+          
+          if (now - lastFeedTime > 5 * 60 * 1000) {
+            throw new Error("Sensor data is older than 5 minutes");
+          }
+
           const lastDistance = parseFloat(lastFeed.field1);
           const lastPh = parseFloat(lastFeed.field2);
-
+          
           if (!isNaN(lastDistance)) setDistance(lastDistance);
           if (!isNaN(lastPh)) setPh(lastPh);
 
@@ -64,7 +71,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
             const rawDistance = parseFloat(feed.field1) || 0;
             return {
               time: `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`,
-              distance: Math.max(0, 200 - rawDistance), // convert to water depth
+              distance: Math.max(0, rawDistance), // sensor provides water depth directly
               ph: parseFloat(feed.field2) || 0
             };
           });
@@ -75,7 +82,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
         }
       } catch (error) {
         setIsOffline(true);
-        setOfflineDate("July 12, 2026, 14:30 WAT");
+        setOfflineDate(new Date().toLocaleString());
 
         const lastKnownDistance = 179;
         const lastKnownPh = 6.4;
