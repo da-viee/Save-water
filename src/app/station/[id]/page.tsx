@@ -56,9 +56,7 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
           const lastFeedTime = new Date(lastFeed.created_at).getTime();
           const now = new Date().getTime();
           
-          if (now - lastFeedTime > 5 * 60 * 1000) {
-            throw new Error("Sensor data is older than 5 minutes");
-          }
+          const isOldData = now - lastFeedTime > 5 * 60 * 1000;
 
           const lastDistance = parseFloat(lastFeed.field1);
           const lastPh = parseFloat(lastFeed.field2);
@@ -76,25 +74,35 @@ export default function StationDashboard({ params }: { params: Promise<{ id: str
             };
           });
           setChartData(formattedChartData);
-          setIsOffline(false);
+          
+          if (isOldData) {
+            setIsOffline(true);
+            const offlineTime = new Date(lastFeedTime + 5 * 60 * 1000);
+            setOfflineDate(offlineTime.toLocaleString());
+          } else {
+            setIsOffline(false);
+          }
         } else {
           throw new Error("No data feeds");
         }
       } catch (error) {
+        // Only falls back to this if the fetch itself fails completely (e.g. no internet)
         setIsOffline(true);
         setOfflineDate(new Date().toLocaleString());
 
-        const lastKnownDistance = 179;
-        const lastKnownPh = 6.4;
+        // We only use these hardcoded numbers if ThingSpeak is completely unreachable
+        // Otherwise, the last actual numbers from ThingSpeak are used above.
+        const fallbackDistance = 179;
+        const fallbackPh = 6.4;
 
-        setDistance(lastKnownDistance);
-        setPh(lastKnownPh);
+        setDistance(fallbackDistance);
+        setPh(fallbackPh);
 
         setChartData([
-          { time: "11:00", distance: 200 - 179, ph: 6.5 },
-          { time: "12:00", distance: 200 - 178, ph: 6.3 },
-          { time: "13:00", distance: 200 - 175, ph: 6.2 },
-          { time: "14:30", distance: 200 - lastKnownDistance, ph: lastKnownPh }
+          { time: "11:00", distance: 200 - fallbackDistance, ph: 6.5 },
+          { time: "12:00", distance: 200 - fallbackDistance + 1, ph: 6.3 },
+          { time: "13:00", distance: 200 - fallbackDistance + 4, ph: 6.2 },
+          { time: "14:30", distance: 200 - fallbackDistance, ph: fallbackPh }
         ]);
       } finally {
         setIsLoading(false);
