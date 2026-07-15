@@ -79,7 +79,7 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
         </div>
         <div className="text-right">
           <div className={`text-white ${statusBgColor} px-3 py-1 font-black text-xl shadow-sm inline-block`}>
-            {floodDepthCm} <span className="text-sm font-medium">cm Depth</span>
+            {floodDepthCm.toFixed(2)} <span className="text-sm font-medium">cm Depth</span>
           </div>
         </div>
       </div>
@@ -179,7 +179,7 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
 
 
         {/* Height Markers — mathematically aligned to the water fill percentage */}
-        <div className="hidden lg:block absolute inset-y-0 right-0 w-44 border-l-2 border-dashed border-gray-300 pointer-events-none" style={{ zIndex: 30 }}>
+        <div className="absolute inset-y-0 right-0 w-44 border-l-2 border-dashed border-gray-300 pointer-events-none" style={{ zIndex: 30 }}>
           {/* SUV Engine — 80cm depth (40% height) */}
           <div className="absolute w-full border-t border-red-300" style={{ bottom: '40%' }}>
             <span className="absolute -top-3 left-3 bg-[#E5243B] text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5 shadow-md whitespace-nowrap">
@@ -208,11 +208,10 @@ export default function WaterLevelIndicator({ distanceValue, phValue }: WaterLev
         {/* Car SVG — front-view, RIGHT half visible, hugging the right edge of card */}
         {/* Attribution: "Car" icon by Yon ten from the Noun Project */}
         <div
-          className="absolute z-10 hidden md:block"
+          className="absolute z-10 left-[-35%] md:left-[-67%]"
           style={{
             width: '100%',   /* ← increase this % to make car wider */
             height: '150%',  /* ← increase this % to make car taller */
-            left: '-67%',  /* ← decrease (e.g. -10%) to move car further into view */
             bottom: '-45%', /* ← make more negative to push car further down */
             overflow: 'hidden',
           }}

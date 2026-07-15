@@ -13,6 +13,24 @@ interface HistoricalChartsProps {
 }
 
 export default function HistoricalCharts({ data }: HistoricalChartsProps) {
+  const handleExportCSV = () => {
+    if (!data || data.length === 0) return;
+    const headers = ["Time", "Water Depth (cm)", "pH Level"];
+    const csvContent = [
+      headers.join(","),
+      ...data.map(row => `${row.time},${row.distance.toFixed(2)},${row.ph.toFixed(2)}`)
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "water_level_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (!data || data.length === 0) {
     return (
       <div className="bg-white border border-gray-200 shadow-md h-96 flex items-center justify-center">
@@ -28,7 +46,10 @@ export default function HistoricalCharts({ data }: HistoricalChartsProps) {
           <h3 className="text-2xl font-black text-gray-900 uppercase tracking-tighter">24-Hour Trend Analysis</h3>
           <p className="text-sm text-gray-500 font-bold mt-1 tracking-widest">Live data from ThingSpeak IoT Network</p>
         </div>
-        <button className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-sm font-black text-gray-700 px-6 py-3 transition-colors uppercase tracking-widest">
+        <button 
+          onClick={handleExportCSV}
+          className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-sm font-black text-gray-700 px-6 py-3 transition-colors uppercase tracking-widest"
+        >
           Export CSV
         </button>
       </div>

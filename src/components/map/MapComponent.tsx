@@ -39,6 +39,34 @@ const stations = [
     position: [6.5910, 3.5042] as [number, number],
     status: 'Simulated Demo Station',
     isLive: false
+  },
+  {
+    id: 'victoria-island',
+    name: 'Victoria Island',
+    position: [6.4281, 3.4219] as [number, number],
+    status: 'Simulated Demo Station',
+    isLive: false
+  },
+  {
+    id: 'apapa',
+    name: 'Apapa Port',
+    position: [6.4452, 3.3615] as [number, number],
+    status: 'Simulated Demo Station',
+    isLive: false
+  },
+  {
+    id: 'epe',
+    name: 'Epe Marina',
+    position: [6.5841, 3.9833] as [number, number],
+    status: 'Simulated Demo Station',
+    isLive: false
+  },
+  {
+    id: 'badagry',
+    name: 'Badagry Creek',
+    position: [6.4316, 2.8876] as [number, number],
+    status: 'Simulated Demo Station',
+    isLive: false
   }
 ];
 
